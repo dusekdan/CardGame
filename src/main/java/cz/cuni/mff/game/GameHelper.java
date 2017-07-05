@@ -5,7 +5,8 @@ import cz.cuni.mff.models.Card;
 import java.util.ArrayList;
 
 /**
- * Created by - on 4.7.2017.
+ * Created by David Riha on 4.7.2017.
+ * Project: Simplified HearthStone java implementation
  */
 // Contains functionality for starting, ending and generating the game
 public class GameHelper

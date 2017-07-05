@@ -4,7 +4,8 @@ import com.sun.deploy.panel.SpecialTreeListener;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
- * Created by - on 4.7.2017.
+ * Created by David Riha on 4.7.2017.
+ * Project: Simplified HearthStone java implementation
  */
 // TODO: Consider making this abstract and side effects of such action
 public class Card {

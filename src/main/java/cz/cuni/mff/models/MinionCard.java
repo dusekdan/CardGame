@@ -3,7 +3,8 @@ package cz.cuni.mff.models;
 import cz.cuni.mff.game.LocalizationHelper;
 
 /**
- * Created by - on 4.7.2017.
+ * Created by David Riha on 4.7.2017.
+ * Project: Simplified HearthStone java implementation
  */
 public class MinionCard extends Card
 {

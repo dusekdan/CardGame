@@ -4,7 +4,8 @@ import cz.cuni.mff.models.BoardSides;
 import cz.cuni.mff.models.MinionTypes;
 
 /**
- * Created by - on 4.7.2017.
+ * Created by David Riha on 4.7.2017.
+ * Project: Simplified HearthStone java implementation
  */
 public class LocalizationHelper
 {
