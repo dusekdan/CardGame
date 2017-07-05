@@ -6,6 +6,13 @@ package cz.cuni.mff.models;
  */
 public class SpellCard extends Card {
 
+    /**
+     * Constructs spell card specialization
+     * @param name String Card name
+     * @param description String Card description, not displayed when special effect present
+     * @param cost Integer Mana cost for card to be played
+     * @param effect SpecialEffect Effect that card has
+     */
     public SpellCard(String name, String description, int cost, SpecialEffect effect)
     {
         // Fill general card properties
@@ -13,10 +20,13 @@ public class SpellCard extends Card {
 
         // Fill spell-card specific properties
 
+        // Log info card to console
         logSpellCardInfo();
-
     }
 
+    /**
+     * Logs information about card that the instance represents
+     */
     private void logSpellCardInfo()
     {
         System.out.println("+----------CARD----------+");

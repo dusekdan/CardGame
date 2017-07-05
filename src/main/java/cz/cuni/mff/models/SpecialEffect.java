@@ -6,26 +6,27 @@ package cz.cuni.mff.models;
  */
 public class SpecialEffect implements java.io.Serializable {
 
+    /**
+     * General Special Effect properties
+     */
     private String description;
-
-
+    private String name;
     private int healthEffect;
     private int manaEffect;
     private int manaCrystalEffect;
 
-    // Target type
+    // -- TargetType
+    // -- EffectType (planning to calendar(?), battlecry / deathrattle / ...)
+    // -- Positive | Negative effect (important for apply/reverse methods)
+    // -- Method for applying effect
+    // -- Method for reversing effect
 
+    /**
+     * Constructs Special Effect based on parameters
+     */
     public SpecialEffect()
     {
         //System.out.println("Special effect constructor created.");
     }
-
-    //        // TODO: Define special effect of card
-    //
-    //        // "target type" -> any hero / friendly hero / enemy hero / any minion / enemy minion / friendly minion / all / all except heroes
-    //        // "effect type" -> battlecry / deathrattle / ... let's not make this complicated
-    //        // -- based on target type & effect type either boost the target immediately (with considering possible buff removal on minion death)
-    //
-    //        // "description"
 
 }

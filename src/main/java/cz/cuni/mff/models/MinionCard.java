@@ -8,16 +8,33 @@ import cz.cuni.mff.game.LocalizationHelper;
  */
 public class MinionCard extends Card
 {
+
+    /**
+     * MinionCard specific card properties
+     */
     private int health;
     private int attack;
-
     private MinionTypes minionType;
 
+
+    /**
+     * Derivable card properties and flags relevant to
+     * current minion state.
+     */
     private boolean readyToAttack = false;
     private boolean isTaunt = false;
 
 
-
+    /**
+     * Construct Minion Card based of parameters provided
+     * @param name String Minion name
+     * @param description String Minion description, in collision with SpecialEffect description
+     * @param cost Integer Mana cost to play the card
+     * @param effect SpecialEffect Special effect assigned to the minion card
+     * @param health Integer Number of health the minion have when created
+     * @param attack Integer Number of HP removed when attacked by this minion
+     * @param minionType MinionTypes Type of minion either taunt or charge or regular
+     */
     public MinionCard(String name, String description, int cost, SpecialEffect effect, int health, int attack, MinionTypes minionType)
     {
         // Fill general card properties
@@ -44,6 +61,9 @@ public class MinionCard extends Card
     }
 
 
+    /**
+     * Logs information about card that the instance represents
+     */
     private void logMinionCardInfo()
     {
         System.out.println("+----------CARD----------+");
@@ -61,6 +81,9 @@ public class MinionCard extends Card
     }
 
 
+    /**
+     * Getters for card properties
+     */
     public int getHealth() {
         return health;
     }

@@ -3,8 +3,6 @@ package cz.cuni.mff;
 import cz.cuni.mff.game.Board;
 import cz.cuni.mff.models.*;
 
-import java.io.IOException;
-
 /**
  * Created by David Riha on 4.7.2017.
  * Project: Simplified HearthStone java implementation
