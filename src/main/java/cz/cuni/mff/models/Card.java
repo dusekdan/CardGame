@@ -8,13 +8,9 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * Project: Simplified HearthStone java implementation
  */
 // TODO: Consider making this abstract and side effects of such action
-public class Card {
-
+public class Card implements java.io.Serializable {
     private static final int CARD_DEFAULT_MANA_COST = 666;
     private static final String CARD_EMPTY_NAME = "Undefined";
-
-    //private int manaCost = CARD_DEFAULT_MANA_COST;
-    //private String cardName = CARD_EMPTY_NAME;
 
 
     private CardTypes type;

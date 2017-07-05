@@ -35,6 +35,17 @@ public class Main
         // Create board
         Board board = new Board();
 
+        // Create two heroes
+        Hero player = new Hero("FlexoCZ", true);
+        Hero computer = new Hero("Anihilat0r", false);
+
+        // Place heroes in the game
+        board.putHero(player);
+        board.putHero(computer);
+
+        // Generate decks for players.
+        board.prepareDecks();
+
 
         // Place both cards somewhere on the board
         //board.placeCard(0, BoardSides.LEFT, minion1);
