@@ -11,17 +11,17 @@ import java.util.ArrayList;
 public class GameHelper
 {
 
-    public static ArrayList<Card> prepareDeck()
-    {
-        ArrayList<Card> deck = new ArrayList<Card>();
-
-        Card testCard = new Card();
-
-        // TODO: Use CardFactory pattern
-        // TODO: Use SpecialEffectFactory pattern
-
-        return deck;
-    }
+//    public static ArrayList<Card> prepareDeck()
+//    {
+//       ArrayList<Card> deck = new ArrayList<Card>();
+//
+//
+//
+//        // TODO: Use CardFactory pattern
+//        // TODO: Use SpecialEffectFactory pattern
+//
+//        return deck;
+//    }
 
 
 }

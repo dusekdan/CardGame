@@ -1,5 +1,6 @@
 package cz.cuni.mff.models;
 
+import com.sun.deploy.panel.SpecialTreeListener;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -8,57 +9,48 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 // TODO: Consider making this abstract and side effects of such action
 public class Card {
 
-    public static final int CARD_DEFAULT_MANA_COST = 666;
-    public static final String CARD_EMPTY_NAME = "Undefined";
+    private static final int CARD_DEFAULT_MANA_COST = 666;
+    private static final String CARD_EMPTY_NAME = "Undefined";
 
-    public int manaCost = CARD_DEFAULT_MANA_COST;
-    public String cardName = CARD_EMPTY_NAME;
+    //private int manaCost = CARD_DEFAULT_MANA_COST;
+    //private String cardName = CARD_EMPTY_NAME;
+
+
+    private CardTypes type;
+    private String name;
+    private String description;
+    private int cost;
+    private SpecialEffect effect;
+
+
+
+    public Card(CardTypes type, String name, String description, int cost, SpecialEffect effect)
+    {
+        this.type = type;
+        this.name = name;
+        this.description = description;
+        this.cost = cost;
+        this.effect = effect;
+    }
+
+
 
     private SpecialEffect specialEffect;
 
+
+
+
+
     public String getCardName()
     {
-        return this.cardName;
-    }
-
-    public String getCardDescription()
-    {
-        return this.specialEffect.getDescription();
+        return this.name;
     }
 
     public int getManaCost()
     {
-        return this.manaCost;
+        return this.cost;
     }
 
+    public String getDescription() { return this.description; }
 
-
-    // Should represent special effect on card (the text in empty box bellow picture)
-    private class SpecialEffect
-    {
-        public String description = "Effect description";
-
-        public void applySpecialEffect(int target)  // will be slot identification?
-        {
-            throw new NotImplementedException();
-        }
-
-        public void reverseSpecialEffect(int target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public String getDescription()
-        {
-            return this.description;
-        }
-
-        // TODO: Define special effect of card
-
-        // "target type" -> any hero / friendly hero / enemy hero / any minion / enemy minion / friendly minion / all / all except heroes
-        // "effect type" -> battlecry / deathrattle / ... let's not make this complicated
-        // -- based on target type & effect type either boost the target immediately (with considering possible buff removal on minion death)
-
-        // "description"
-    }
 }
