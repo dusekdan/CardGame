@@ -45,24 +45,50 @@ public class Board implements IBoard {
         ArrayList<Card> cardPool = CardFactory.getInstance().getAllCards();
 
         // Generate random 30-items decks
-        // TODO: Major room for improvement, especially considering game design
+        // TODO: Major room for improvement, especially considering game design, now it's random draft
 
-        Card picked;
+        Card pickedPlayer;
+        Card pickedComputer;
         for (int i = 0; i < 30; i++)
         {
             // Pick random card instance and clone it to playerDeck (do the same for computerDeck)
-            picked = GameHelper.randomArrayListItem(cardPool);
-            System.out.println("Randomly picked: " + picked.getCardName());
-            System.out.println("Object ID: " + picked);
+            pickedPlayer = GameHelper.randomArrayListItem(cardPool);
+            pickedComputer = GameHelper.randomArrayListItem(cardPool);
 
-            try{
-                playerDeck.add(
-                        (Card) ObjectCloner.deepCopy(picked)
-                );
+            System.out.println("Randomly picked: " + pickedPlayer.getCardName());
+            System.out.println("Object ID: " + pickedPlayer);
+
+            // TODO: Warning - typecasting here could potentially lose some information
+            // -- Karel Fajkus believes that it will be okay, thought. He's good in Java, he should know.
+            try
+            {
+                /*if (pickedPlayer.getType() == CardTypes.SPELL_CARD)
+                {
+                     playerDeck.add(
+                             (SpellCard) ObjectCloner.deepCopy(pickedPlayer)
+                    );
+                }
+                else
+                {
+                     playerDeck.add(
+                             (MinionCard) ObjectCloner.deepCopy(pickedPlayer)
+                    );
+                }*/
+
+                playerDeck.add((Card) ObjectCloner.deepCopy(pickedPlayer));
+                computerDeck.add((Card) ObjectCloner.deepCopy(pickedComputer));
             }
             catch (Exception e)
             {
                 System.out.println("Unable to clone object, message: " + e.getMessage());
+            }
+
+
+
+            Card justAdded = playerDeck.get(playerDeck.size()-1);
+            if (justAdded instanceof MinionCard)
+            {
+                System.out.println("This card is minion with health: " + ((MinionCard) justAdded).getHealth());
             }
 
         }
@@ -75,8 +101,8 @@ public class Board implements IBoard {
         System.out.println("=======SHOWING DECK=========");
         for (int i = 0; i < playerDeck.size(); i++)
         {
-            System.out.println("Card: " + playerDeck.get(i).getCardName());
-            System.out.println("Object ID: " + playerDeck.get(i));
+            System.out.println("(Player, Computer): (" + playerDeck.get(i).getCardName() + ", " + computerDeck.get(i).getCardName() + ")");
+            System.out.println("Object ID: " + playerDeck.get(i) + ", " + computerDeck.get(i));
         }
     }
 

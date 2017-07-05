@@ -30,14 +30,6 @@ public class Card implements java.io.Serializable {
         this.effect = effect;
     }
 
-
-
-    private SpecialEffect specialEffect;
-
-
-
-
-
     public String getCardName()
     {
         return this.name;
@@ -50,4 +42,5 @@ public class Card implements java.io.Serializable {
 
     public String getDescription() { return this.description; }
 
+    public CardTypes getType() { return type; }
 }
