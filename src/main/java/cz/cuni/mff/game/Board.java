@@ -37,7 +37,55 @@ public class Board implements IBoard {
     private ArrayList<Card> computerDeck = new ArrayList<Card>();
 
 
+    public void drawCard(Hero hero)
+    {
+        if (hero.isPlayer())
+        {
+            if (playerDeck.size() >= 1)
+            {
+                // Remove the last one and remember forever that we draw decks from
+                // the end, virtually.
+                Card card = playerDeck.remove(playerDeck.size()-1);
+                hero.putCardToHand(card);
 
+                // Report what happened
+                System.out.println("Player " + hero.getName() + " draw " + card.getCardName());
+            }
+            else
+            {
+                reportFatigue();
+            }
+        }
+        else
+        {
+            if (computerDeck.size() >= 1)
+            {
+                Card card = computerDeck.remove(computerDeck.size()-1);
+                hero.putCardToHand(card);
+
+                // Report what happened
+                System.out.println("Player " + hero.getName() + " draw  " + card.getCardName());    // Smells like duplicate code TODO
+            }
+            else
+            {
+                reportFatigue();
+            }
+        }
+
+        System.out.println("Current player deck size: " + playerDeck.size());
+        System.out.println("Current hero hand size:" + hero.getHand().size());
+    }
+
+
+    private void reportFatigue()
+    {
+        System.out.println("!!! NO CARDS LEFT IN DECK - FATIGUE !!!");
+    }
+
+    public boolean isGameOver()
+    {
+        return (player.getHealth() <= 0 || computer.getHealth() <= 0);
+    }
 
     public void prepareDecks()
     {
@@ -83,17 +131,15 @@ public class Board implements IBoard {
                 System.out.println("Unable to clone object, message: " + e.getMessage());
             }
 
-
-
-            Card justAdded = playerDeck.get(playerDeck.size()-1);
+            /*Card justAdded = playerDeck.get(playerDeck.size()-1);
             if (justAdded instanceof MinionCard)
             {
                 System.out.println("This card is minion with health: " + ((MinionCard) justAdded).getHealth());
-            }
+            }*/
 
         }
 
-        showDecks();
+        //showDecks();
     }
 
     private void showDecks()
@@ -106,13 +152,6 @@ public class Board implements IBoard {
         }
     }
 
-
-
-    /*private void shuffleDeck()
-    {
-        long seed = System.nanoTime();
-        Collections.shuffle(deck)
-    }*/
 
     // Let's introduce convention here - LEFT is the computer side, RIGHT is the player side
     // One day, we will regret this. But that day is not today. Today we fight.

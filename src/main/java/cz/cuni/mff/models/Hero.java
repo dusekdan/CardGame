@@ -16,10 +16,39 @@ public class Hero
     private int crystals;
     private boolean player;
 
+    private boolean defeated = false;
+
     private ArrayList<Card> hand = new  ArrayList<Card>();
 
 
     public int getHealth() { return health; }
+    public void decreaseHealthBy(int value)
+    {
+        this.setHealth(getHealth() - value);
+
+        // TODO: If we enable logic that will save hero somehow on 0 and less HP, exception check will come here
+        if (getHealth() <= 0)
+        {
+            defeated = true;
+        }
+    }
+    public void increaseHealthby(int value)
+    {
+        this.setHealth(getHealth() + value);
+    }
+    private void setHealth(int value)
+    {
+        this.health = value;
+    }
+
+    public void putCardToHand(Card card)
+    {
+        hand.add(card);
+    }
+
+
+
+    public ArrayList<Card> getHand() { return this.hand; }
 
     public int getArmor() { return armor; }
 
@@ -43,5 +72,9 @@ public class Hero
 
     public String getName() {
         return name;
+    }
+
+    public boolean isDefeated() {
+        return defeated;
     }
 }

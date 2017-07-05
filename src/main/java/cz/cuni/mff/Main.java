@@ -3,6 +3,8 @@ package cz.cuni.mff;
 import cz.cuni.mff.game.Board;
 import cz.cuni.mff.models.*;
 
+import java.io.IOException;
+
 /**
  * Created by David Riha on 4.7.2017.
  * Project: Simplified HearthStone java implementation
@@ -46,10 +48,59 @@ public class Main
         // Generate decks for players.
         board.prepareDecks();
 
+        // Game loop
+        // -- While both heroes health are greater than 0, loop
+        int round = 0;
+        while (!board.isGameOver())
+        {
+            System.out.println("Entering round: #" + round);
+
+            try
+            {
+                Thread.sleep(500);
+            }
+            catch (Exception e)
+            {
+                System.out.println("Unable to sleep, so we're just gonna skip to another round.");
+            }
+
+            System.out.println("Leaving round: #" + round);
+
+            round++;
+            //player.decreaseHealthBy(1);
+            board.drawCard(player);
+            board.drawCard(computer);
+
+            /*
+            System.out.println("Press enter to proceed to another round.");
+            try {
+                System.in.read();
+            } catch (IOException e) {
+                System.out.println("Something went south.");
+            }
+            */
+        }
+
+        // Retrieve game result
+        // -- Winner
+        // -- Number of rounds
+        // -- What else?
+        String winner = (player.isDefeated()) ? computer.getName() : player.getName();
+        printGameResults(winner, round);
 
         // Place both cards somewhere on the board
         //board.placeCard(0, BoardSides.LEFT, minion1);
         //board.placeCard(0, BoardSides.RIGHT, spell1);
+
+    }
+
+    private static void printGameResults(String winner, int roundsTotal)
+    {
+        System.out.println(" === THE GAME HAS ENDED ===");
+        System.out.println(" And the winner is... ");
+        System.out.println(" " + winner);
+        System.out.println(" Rounds played: " + roundsTotal);
+        System.out.println(" === SEE YOU NEXT TIME  ===");
 
     }
 
@@ -65,7 +116,7 @@ public class Main
         // Card creation
         CardFactory factory = CardFactory.getInstance();
 
-// Minion Cards
+        // Minion Cards
         factory.createMinionCard("Ogre Magi", "Intelect based troll with two heads.", 4, new SpecialEffect(), 4, 2, MinionTypes.REGULAR);
         factory.createMinionCard("Bloodfen raptor", "", 2, new SpecialEffect(), 3, 2, MinionTypes.REGULAR);
         factory.createMinionCard("Abomination", "", 5, new SpecialEffect(), 4, 4, MinionTypes.TAUNT);
