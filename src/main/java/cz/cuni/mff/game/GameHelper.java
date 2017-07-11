@@ -21,10 +21,9 @@ public class GameHelper
      * @return Card Random card from the list (deck)
      * TODO: Inspect this for enough randomness and distribution (it is not great at the moment)
      */
-    private static Random rand;
     public static Card randomArrayListItem(ArrayList<Card> list)
     {
-        rand = new Random();
+        final Random rand = new Random();
         return list.get(rand.nextInt(list.size()));
     }
 }

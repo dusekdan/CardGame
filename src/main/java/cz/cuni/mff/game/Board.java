@@ -133,7 +133,7 @@ public class Board{
      */
     public boolean placeCard(int slotNumber, BoardSides side, Card card)
     {
-        if (slotNumber < MAX_SLOT_INDEX && slotNumber >= 0)
+        if (slotNumber >= 0 && slotNumber < MAX_SLOT_INDEX)
         {
             System.out.println("Don't mind me, I'm just placing " + card.getCardName() + " to slot number " + slotNumber + " on " + LocalizationHelper.getBoardSideName(side) + " side of the board.");
 

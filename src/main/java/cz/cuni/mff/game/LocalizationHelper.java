@@ -40,8 +40,9 @@ public class LocalizationHelper
                 return "Taunt";
             case CHARGE:
                 return "Charge";
+            default:
+                return  "Undefined";
         }
-        return "Undefined";
     }
 
 }

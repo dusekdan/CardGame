@@ -1,4 +1,4 @@
-package configuration;
+package cz.cuni.mff.configuration;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
