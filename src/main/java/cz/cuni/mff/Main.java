@@ -2,6 +2,10 @@ package cz.cuni.mff;
 
 import cz.cuni.mff.game.Board;
 import cz.cuni.mff.models.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * Created by David Riha on 4.7.2017.
@@ -9,18 +13,28 @@ import cz.cuni.mff.models.*;
  */
 // Launching the application via "Main" build configuration is only a temporary
 // solution as we'll configure maven later on.
+@SpringBootApplication
 public class Main
 {
+
+    @Autowired
+    private CardFactory cardFactory;
+
+    @Autowired
+    private Board board;
+
     public static void main(String[] args)
     {
         System.out.println("Let's pretend we are launching the game.");
 
-        launchGame();
+        final ConfigurableApplicationContext ctx = SpringApplication.run(Main.class, args);
+        final Main thisObj = ctx.getBean(Main.class);
+        thisObj.launchGame();
 
         System.out.println("The game has ended or something");
     }
 
-    private static void launchGame()
+    private void launchGame()
     {
         // Prepare cards that will be used
         prepareGameCards();     // TODO: Handle this in other place, differently (less statics)
@@ -28,12 +42,6 @@ public class Main
         // Test card accessibility
         // This implies that our static implementation works as expected
         // System.out.println("Size of generated pack afterwards: " + CardFactory.getInstance().getAllCards().size());
-
-
-
-
-        // Create board
-        Board board = new Board();
 
         // Create two heroes
         Hero player = new Hero("FlexoCZ", true);
@@ -106,75 +114,72 @@ public class Main
     // and cards and their stats would be pulled from it. This is not a real
     // world, but school projects, so we stick to loading them before game
     // is launched.
-    private static void prepareGameCards()
+    private void prepareGameCards()
     {
         // TODO: Handle SpecialEffect creation here as well so we can link them to cards
         // -- This logic will be possibly relocated to GameHelper before release.
 
-        // Card creation
-        CardFactory factory = CardFactory.getInstance();
-
         // Minion Cards
-        factory.createMinionCard("Ogre Magi", "Intelect based troll with two heads.", 4, new SpecialEffect(), 4, 2, MinionTypes.REGULAR);
-        factory.createMinionCard("Bloodfen raptor", "", 2, new SpecialEffect(), 3, 2, MinionTypes.REGULAR);
-        factory.createMinionCard("Abomination", "", 5, new SpecialEffect(), 4, 4, MinionTypes.TAUNT);
-        factory.createMinionCard("Bluegill Warrior", "", 2, new SpecialEffect(), 2, 1, MinionTypes.CHARGE);
-        factory.createMinionCard("Wisp", "", 0, new SpecialEffect(), 1, 1, MinionTypes.REGULAR);
-        factory.createMinionCard("Elven Archer", "Battlecry: Deal 1 damage.", 1, new SpecialEffect(), 1, 1, MinionTypes.REGULAR);
-        factory.createMinionCard("Abusive Sergeant", "Battlecry: Give a minion +2 attack this turn.", 1, new SpecialEffect(), 1, 1, MinionTypes.REGULAR);
-        factory.createMinionCard("Emerald Reaver", "Battlecry: Deal 1 damage to each hero.", 1, new SpecialEffect(), 2, 1, MinionTypes.REGULAR);
-        factory.createMinionCard("Fire Fly", "Battlecry: Add a 1/2 minion to your hand.", 1, new SpecialEffect(), 1, 2, MinionTypes.REGULAR);
-        factory.createMinionCard("Goldshire Footman", "Taunt", 1, new SpecialEffect(), 1, 2, MinionTypes.TAUNT);
-        factory.createMinionCard("Mistress of Mixtures", "Deathrattle: Restore 4 health to each hero.", 1, new SpecialEffect(), 2, 2, MinionTypes.REGULAR);
-        factory.createMinionCard("Leper Gnome", "Deathrattle: Deal 2 damage to the enemy hero.", 1, new SpecialEffect(), 1, 1, MinionTypes.REGULAR);
-        factory.createMinionCard("Stonetusk Boar", "Charge", 1, new SpecialEffect(), 1, 2, MinionTypes.CHARGE);
-        factory.createMinionCard("Crazed Alchemist", "Battlecry: Swap attack and health of a minion.", 2, new SpecialEffect(), 2, 2, MinionTypes.REGULAR);
-        factory.createMinionCard("Duskboar", "", 2, new SpecialEffect(), 4, 1, MinionTypes.REGULAR);
-        factory.createMinionCard("Frostwolf grunt", "Taunt", 2, new SpecialEffect(), 2, 2, MinionTypes.TAUNT);
-        factory.createMinionCard("Loot Hoarder", "Deathrattle: Draw a card.", 2, new SpecialEffect(), 2, 1, MinionTypes.REGULAR);
-        factory.createMinionCard("Mana Wraith", "ALL minions cost 1 more.", 2, new SpecialEffect(), 2, 2, MinionTypes.REGULAR);
-        factory.createMinionCard("Novice Engineer", "Battlecry: Draw a card.", 2, new SpecialEffect(), 1, 1, MinionTypes.REGULAR);
-        factory.createMinionCard("River Crocolisk", "", 2, new SpecialEffect(), 2, 3, MinionTypes.REGULAR);
-        factory.createMinionCard("Sunfury Protector", "Battlecry: Give adjacent \n minions Taunt.", 2, new SpecialEffect(), 2, 3, MinionTypes.REGULAR);
-        factory.createMinionCard("Stonetusk Boar", "Charge", 1, new SpecialEffect(), 1, 2, MinionTypes.REGULAR);
-        factory.createMinionCard("Arcane Golem", "Battlecry: Give your  \n opponent a Mana crystal", 2, new SpecialEffect(), 4, 4, MinionTypes.REGULAR);
-        factory.createMinionCard("Am'gam Rager", "", 2, new SpecialEffect(), 1, 5, MinionTypes.REGULAR);
-        factory.createMinionCard("Coldlight Oracle", "Battlecry: Each player \n draws 2 cards.", 3, new SpecialEffect(), 2, 2, MinionTypes.REGULAR);
-        factory.createMinionCard("Hired Gun", "Taunt", 3, new SpecialEffect(), 4, 3, MinionTypes.TAUNT);
-        factory.createMinionCard("Magma Rager", "", 3, new SpecialEffect(), 5, 1, MinionTypes.REGULAR);
-        factory.createMinionCard("Raid Leader", "Your other minions have \n +1 attack.", 3, new SpecialEffect(), 2, 2, MinionTypes.REGULAR);
-        factory.createMinionCard("Shattered Sun Cleric", "Battlecry: Give a friendly minion +1/+1.", 3, new SpecialEffect(), 3, 2, MinionTypes.REGULAR);
-        factory.createMinionCard("Wolfrider", "Charge", 3, new SpecialEffect(), 3, 1, MinionTypes.CHARGE);
-        factory.createMinionCard("Chillwind Yeti", "", 4, new SpecialEffect(), 4, 5, MinionTypes.REGULAR);
-        factory.createMinionCard("Fire Plume Phoenix", "Battlecry: Deal 2 damage.", 4, new SpecialEffect(), 3, 3, MinionTypes.REGULAR);
-        factory.createMinionCard("Gnomish Inventor", "Battlecry: Draw a card.", 4, new SpecialEffect(), 2, 4, MinionTypes.REGULAR);
-        factory.createMinionCard("Oasis Snapjaw", "", 4, new SpecialEffect(), 2, 7, MinionTypes.REGULAR);
-        factory.createMinionCard("Sen'jin Shieldmasta", "Taunt", 4, new SpecialEffect(), 3, 5, MinionTypes.TAUNT);
-        factory.createMinionCard("Stormwind Knight", "Charge", 4, new SpecialEffect(), 2, 5, MinionTypes.CHARGE);
-        factory.createMinionCard("Darkscale Healer", "Battlecry: Restore 2 health to all friendly characters.", 5, new SpecialEffect(), 4, 5, MinionTypes.REGULAR);
-        factory.createMinionCard("Stormpike Commando", "Battlecry: Deal 2 damage.", 5, new SpecialEffect(), 4, 2, MinionTypes.REGULAR);
-        factory.createMinionCard("Ancient of Blossoms", "Taunt", 6, new SpecialEffect(), 3, 8, MinionTypes.TAUNT);
-        factory.createMinionCard("Boulderfist Ogre", "", 6, new SpecialEffect(), 6, 7, MinionTypes.REGULAR);
-        factory.createMinionCard("Reckless Rocketeer", "Charge", 6, new SpecialEffect(), 5, 2, MinionTypes.CHARGE);
-        factory.createMinionCard("Bog Creeper", "Taunt", 7, new SpecialEffect(), 6, 8, MinionTypes.REGULAR);
-        factory.createMinionCard("War Golem", "", 7, new SpecialEffect(), 7, 7, MinionTypes.REGULAR);
-        factory.createMinionCard("Alexstraza", "Battlecry: Set a hero's remaining health to 15.", 8, new SpecialEffect(), 8, 8, MinionTypes.REGULAR);
-        factory.createMinionCard("Sea Giant", "Cost 1 less for each other minion on the battlefield", 10, new SpecialEffect(), 8, 8, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Ogre Magi", "Intelect based troll with two heads.", 4, new SpecialEffect(), 4, 2, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Bloodfen raptor", "", 2, new SpecialEffect(), 3, 2, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Abomination", "", 5, new SpecialEffect(), 4, 4, MinionTypes.TAUNT);
+        cardFactory.createMinionCard("Bluegill Warrior", "", 2, new SpecialEffect(), 2, 1, MinionTypes.CHARGE);
+        cardFactory.createMinionCard("Wisp", "", 0, new SpecialEffect(), 1, 1, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Elven Archer", "Battlecry: Deal 1 damage.", 1, new SpecialEffect(), 1, 1, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Abusive Sergeant", "Battlecry: Give a minion +2 attack this turn.", 1, new SpecialEffect(), 1, 1, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Emerald Reaver", "Battlecry: Deal 1 damage to each hero.", 1, new SpecialEffect(), 2, 1, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Fire Fly", "Battlecry: Add a 1/2 minion to your hand.", 1, new SpecialEffect(), 1, 2, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Goldshire Footman", "Taunt", 1, new SpecialEffect(), 1, 2, MinionTypes.TAUNT);
+        cardFactory.createMinionCard("Mistress of Mixtures", "Deathrattle: Restore 4 health to each hero.", 1, new SpecialEffect(), 2, 2, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Leper Gnome", "Deathrattle: Deal 2 damage to the enemy hero.", 1, new SpecialEffect(), 1, 1, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Stonetusk Boar", "Charge", 1, new SpecialEffect(), 1, 2, MinionTypes.CHARGE);
+        cardFactory.createMinionCard("Crazed Alchemist", "Battlecry: Swap attack and health of a minion.", 2, new SpecialEffect(), 2, 2, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Duskboar", "", 2, new SpecialEffect(), 4, 1, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Frostwolf grunt", "Taunt", 2, new SpecialEffect(), 2, 2, MinionTypes.TAUNT);
+        cardFactory.createMinionCard("Loot Hoarder", "Deathrattle: Draw a card.", 2, new SpecialEffect(), 2, 1, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Mana Wraith", "ALL minions cost 1 more.", 2, new SpecialEffect(), 2, 2, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Novice Engineer", "Battlecry: Draw a card.", 2, new SpecialEffect(), 1, 1, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("River Crocolisk", "", 2, new SpecialEffect(), 2, 3, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Sunfury Protector", "Battlecry: Give adjacent \n minions Taunt.", 2, new SpecialEffect(), 2, 3, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Stonetusk Boar", "Charge", 1, new SpecialEffect(), 1, 2, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Arcane Golem", "Battlecry: Give your  \n opponent a Mana crystal", 2, new SpecialEffect(), 4, 4, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Am'gam Rager", "", 2, new SpecialEffect(), 1, 5, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Coldlight Oracle", "Battlecry: Each player \n draws 2 cards.", 3, new SpecialEffect(), 2, 2, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Hired Gun", "Taunt", 3, new SpecialEffect(), 4, 3, MinionTypes.TAUNT);
+        cardFactory.createMinionCard("Magma Rager", "", 3, new SpecialEffect(), 5, 1, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Raid Leader", "Your other minions have \n +1 attack.", 3, new SpecialEffect(), 2, 2, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Shattered Sun Cleric", "Battlecry: Give a friendly minion +1/+1.", 3, new SpecialEffect(), 3, 2, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Wolfrider", "Charge", 3, new SpecialEffect(), 3, 1, MinionTypes.CHARGE);
+        cardFactory.createMinionCard("Chillwind Yeti", "", 4, new SpecialEffect(), 4, 5, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Fire Plume Phoenix", "Battlecry: Deal 2 damage.", 4, new SpecialEffect(), 3, 3, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Gnomish Inventor", "Battlecry: Draw a card.", 4, new SpecialEffect(), 2, 4, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Oasis Snapjaw", "", 4, new SpecialEffect(), 2, 7, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Sen'jin Shieldmasta", "Taunt", 4, new SpecialEffect(), 3, 5, MinionTypes.TAUNT);
+        cardFactory.createMinionCard("Stormwind Knight", "Charge", 4, new SpecialEffect(), 2, 5, MinionTypes.CHARGE);
+        cardFactory.createMinionCard("Darkscale Healer", "Battlecry: Restore 2 health to all friendly characters.", 5, new SpecialEffect(), 4, 5, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Stormpike Commando", "Battlecry: Deal 2 damage.", 5, new SpecialEffect(), 4, 2, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Ancient of Blossoms", "Taunt", 6, new SpecialEffect(), 3, 8, MinionTypes.TAUNT);
+        cardFactory.createMinionCard("Boulderfist Ogre", "", 6, new SpecialEffect(), 6, 7, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Reckless Rocketeer", "Charge", 6, new SpecialEffect(), 5, 2, MinionTypes.CHARGE);
+        cardFactory.createMinionCard("Bog Creeper", "Taunt", 7, new SpecialEffect(), 6, 8, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("War Golem", "", 7, new SpecialEffect(), 7, 7, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Alexstraza", "Battlecry: Set a hero's remaining health to 15.", 8, new SpecialEffect(), 8, 8, MinionTypes.REGULAR);
+        cardFactory.createMinionCard("Sea Giant", "Cost 1 less for each other minion on the battlefield", 10, new SpecialEffect(), 8, 8, MinionTypes.REGULAR);
 
         // Spell Cards
-        factory.createSpellCard("Flamestrike", "Deal 4 damage to all \n enemy minions.", 7, new SpecialEffect());
-        factory.createSpellCard("Hellfire", "Deal 3 damage to everyone.", 4, new SpecialEffect());
-        factory.createSpellCard("Flare", "All minions \nlose Stealth. Destroy all\nenemy Secrets. Draw a\ncard.", 2, new SpecialEffect());
-        factory.createSpellCard("Arcane Explosion", "Deal 1 damage to all \n enemy minions.", 2, new SpecialEffect());
-        factory.createSpellCard("Arcane Intellect", "Draw 2 cards.", 3, new SpecialEffect());
-        factory.createSpellCard("Fireball", "Deal 6 damage.", 4, new SpecialEffect());
-        factory.createSpellCard("Power Word: Shield", "Give a minion \n +2 health. \n Draw a card.", 1, new SpecialEffect());
-        factory.createSpellCard("Shadow Word: Pain", "Destroy a minion with 3 or less attack.", 2, new SpecialEffect());
-        factory.createSpellCard("Shadow Word: Death", "Destroy a minion with 5 or more attack.", 3, new SpecialEffect());
-        factory.createSpellCard("Bloodlust", "Give your minions +3 attack this turn", 5, new SpecialEffect());
-        factory.createSpellCard("Assassinate", "Destroy an enemy minion.", 5, new SpecialEffect());
-        factory.createSpellCard("Hunter's Mark", "Change a minion's \n health to 1.", 1, new SpecialEffect());
+        cardFactory.createSpellCard("Flamestrike", "Deal 4 damage to all \n enemy minions.", 7, new SpecialEffect());
+        cardFactory.createSpellCard("Hellfire", "Deal 3 damage to everyone.", 4, new SpecialEffect());
+        cardFactory.createSpellCard("Flare", "All minions \nlose Stealth. Destroy all\nenemy Secrets. Draw a\ncard.", 2, new SpecialEffect());
+        cardFactory.createSpellCard("Arcane Explosion", "Deal 1 damage to all \n enemy minions.", 2, new SpecialEffect());
+        cardFactory.createSpellCard("Arcane Intellect", "Draw 2 cards.", 3, new SpecialEffect());
+        cardFactory.createSpellCard("Fireball", "Deal 6 damage.", 4, new SpecialEffect());
+        cardFactory.createSpellCard("Power Word: Shield", "Give a minion \n +2 health. \n Draw a card.", 1, new SpecialEffect());
+        cardFactory.createSpellCard("Shadow Word: Pain", "Destroy a minion with 3 or less attack.", 2, new SpecialEffect());
+        cardFactory.createSpellCard("Shadow Word: Death", "Destroy a minion with 5 or more attack.", 3, new SpecialEffect());
+        cardFactory.createSpellCard("Bloodlust", "Give your minions +3 attack this turn", 5, new SpecialEffect());
+        cardFactory.createSpellCard("Assassinate", "Destroy an enemy minion.", 5, new SpecialEffect());
+        cardFactory.createSpellCard("Hunter's Mark", "Change a minion's \n health to 1.", 1, new SpecialEffect());
 
-        System.out.println("Size of generated card pack is: " + factory.getAllCards().size());
+        System.out.println("Size of generated card pack is: " + cardFactory.getAllCards().size());
     }
 }

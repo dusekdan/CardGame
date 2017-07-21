@@ -1,12 +1,15 @@
 package cz.cuni.mff;
 
 import cz.cuni.mff.models.*;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 
 /**
  * Created by David Riha on 5.7.2017.
  * Project: Simplified HearthStone java implementation
  */
+@Service
 public class CardFactory
 {
     /**

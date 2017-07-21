@@ -3,6 +3,8 @@ package cz.cuni.mff.game;
 import cz.cuni.mff.CardFactory;
 import cz.cuni.mff.models.*;
 import helpers.ObjectCloner;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +13,7 @@ import java.util.Map;
  * Created by David Riha on 4.7.2017.
  * Project: Simplified HearthStone java implementation
  */
+@Service
 public class Board{
 
     /**
