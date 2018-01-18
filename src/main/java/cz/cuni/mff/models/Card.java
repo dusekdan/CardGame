@@ -9,6 +9,13 @@ package cz.cuni.mff.models;
 public class Card implements java.io.Serializable
 {
 
+    // TODO: Implement clone method in subclasses
+    public Card cloneCard()
+    {
+        System.out.println("SOMETHING HORRIBLE HAPPENED, super.cloneCard() was called, should have been called overriden method.");
+        return this;
+    }
+
     /**
      *  General card properties
      */
@@ -50,6 +57,8 @@ public class Card implements java.io.Serializable
     }
 
     public String getDescription() { return this.description; }
+
+    public SpecialEffect getEffect() { return this.effect; }     // TODO: Here should be probably special effect registry, so the special effect is always copied, not referenced.
 
     public CardTypes getType() { return type; }
 }

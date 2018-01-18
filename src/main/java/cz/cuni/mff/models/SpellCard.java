@@ -38,4 +38,10 @@ public class SpellCard extends Card {
         System.out.println("|                        |");
         System.out.println("+------------------------+");
     }
+
+    @Override
+    public SpellCard cloneCard()
+    {
+        return new SpellCard(this.getCardName(), this.getDescription(), this.getManaCost(), this.getEffect());
+    }
 }

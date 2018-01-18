@@ -10,29 +10,12 @@ import java.util.ArrayList;
  * Project: Simplified HearthStone java implementation
  */
 @Service
-public class CardFactory
-{
-    /**
-     * Singleton instance of factory
-     */
-    private static final CardFactory instance = new CardFactory();
+public class CardFactory {
 
     /**
      * All possible cards are stored within the cards ArrayList
      */
-    private static ArrayList<Card> cards = new ArrayList<Card>();
-
-    /**
-     * Empty private constructor to prevent random instantiation
-     */
-    private CardFactory() {}
-
-
-    /**
-     * Singleton instance getter
-     * @return CardFactory Singleton instance
-     */
-    public static CardFactory getInstance() { return instance; }
+    private static ArrayList<Card> cards = new ArrayList();
 
 
     /**
@@ -45,10 +28,10 @@ public class CardFactory
      * @param attack Integer Number of HP removed when attacked by this minion
      * @param minionType MinionTypes Type of minion either taunt or charge or regular
      */
-    public void createMinionCard(String name, String description, int cost, SpecialEffect effect, int health, int attack, MinionTypes minionType)
+    public Card createMinionCard(String name, String description, int cost, SpecialEffect effect, int health, int attack, MinionTypes minionType)
     {
-        MinionCard card = new MinionCard(name, description, cost, effect, health, attack, minionType);
-        cards.add(card);
+        return new MinionCard(name, description, cost, effect, health, attack, minionType);
+        //cards.add(card);
     }
 
 
@@ -59,10 +42,10 @@ public class CardFactory
      * @param cost Integer Mana cost for card to be played
      * @param effect SpecialEffect Effect that card has
      */
-    public void createSpellCard(String name, String description, int cost, SpecialEffect effect)
+    public Card createSpellCard(String name, String description, int cost, SpecialEffect effect)
     {
-        SpellCard card = new SpellCard(name, description, cost, effect);
-        cards.add(card);
+        return new SpellCard(name, description, cost, effect);
+        //cards.add(card);
     }
 
 

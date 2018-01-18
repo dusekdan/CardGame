@@ -3,6 +3,8 @@ package cz.cuni.mff.game;
 import cz.cuni.mff.CardFactory;
 import cz.cuni.mff.models.*;
 import helpers.ObjectCloner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +17,9 @@ import java.util.Map;
  */
 @Service
 public class Board{
+
+    @Autowired
+    private CardFactory cardFactory;
 
     /**
      * Class constants for generally useful magic numbers
@@ -53,7 +58,14 @@ public class Board{
     public void prepareDecks()
     {
         // Get cards from factory
-        ArrayList<Card> cardPool = CardFactory.getInstance().getAllCards();
+        // TODO: Here I stopped when I started introducing proper design patterns (Factories, Prototypes)
+        // So here I have to continue with updating card retrieval to use prototyping.
+        // I have to use CardRegistry in order to get clones of prepared cards
+        // -> it will require to rewrite logic of picking random card. Originally I picked random cards from all cards
+        // pool, now I will have to assume/prepare concrete deck and use cards from the deck.
+        ArrayList<Card> cardPool = cardFactory.getAllCards();
+
+
 
         Card pickedPlayer;
         Card pickedComputer;

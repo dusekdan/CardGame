@@ -95,4 +95,10 @@ public class MinionCard extends Card
     public boolean isReadyToAttack() {
         return readyToAttack;
     }
+
+    @Override
+    public MinionCard cloneCard()
+    {
+        return new MinionCard(this.getCardName(), this.getDescription(), this.getManaCost(), this.getEffect(), this.health, this.attack, this.minionType);
+    }
 }
