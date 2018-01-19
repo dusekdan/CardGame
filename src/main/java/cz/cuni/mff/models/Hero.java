@@ -1,11 +1,10 @@
+/*
+ * Created by David Riha on 4.7.2017.
+ * Project: Simplified HearthStone java implementation.
+ */
 package cz.cuni.mff.models;
-
 import java.util.ArrayList;
 
-/**
- * Created by David Riha on 4.7.2017.
- * Project: Simplified HearthStone java implementation
- */
 public class Hero
 {
     /**
@@ -28,7 +27,7 @@ public class Hero
     /**
      * Current game-state properties
      */
-    private ArrayList<Card> hand = new  ArrayList<Card>();
+    private ArrayList<Card> hand = new  ArrayList<>();
     private boolean defeated = false;
     private int lastFatigueDamage = 0;
 
@@ -61,6 +60,14 @@ public class Hero
         hand.add(card);
     }
 
+    /**
+     * Removes card from hand and fills the gap in hand.
+     * @param index Integer index of card to be removed from hand.
+     */
+    public void removeFromHand(int index)
+    {
+        getHand().remove(index);
+    }
 
     /**
      * Decreases hero health points by value

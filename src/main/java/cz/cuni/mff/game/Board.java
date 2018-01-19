@@ -1,19 +1,17 @@
+/*
+ * Created by David Riha on 4.7.2017.
+ * Project: Simplified HearthStone java implementation.
+ */
 package cz.cuni.mff.game;
-
 import cz.cuni.mff.CardFactory;
 import cz.cuni.mff.CardRegistry;
 import cz.cuni.mff.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by David Riha on 4.7.2017.
- * Project: Simplified HearthStone java implementation
- */
 @Service
 public class Board{
 
@@ -37,28 +35,69 @@ public class Board{
      * Each side of the game board has slots for cards (7 in total each)
      * These are represented as associative arrays created with HashMap & Map
      */
-    private Map<Integer, Card> playerSlots = new HashMap<Integer, Card>();
-    private Map<Integer, Card> computerSlots = new HashMap<Integer, Card>();
+    private Map<Integer, Card> playerSlots = new HashMap<>();
+    private Map<Integer, Card> computerSlots = new HashMap<>();
 
     /**
      * Each hero has its own ArrayList of cards that starts with
-     * 30 cards (generated via prepareDecks) and are reduced with
+     * 30 cards (generated via prepareRandomDecks) and are reduced with
      * each draw (drawCard)
      */
-    private ArrayList<Card> playerDeck = new ArrayList<Card>();
-    private ArrayList<Card> computerDeck = new ArrayList<Card>();
+    private ArrayList<Card> playerDeck = new ArrayList<>();
+    private ArrayList<Card> computerDeck = new ArrayList<>();
 
+    private int round = 1;
+    private int turnsTotal = 0;
+    private boolean playerTurn = true;
+
+    public boolean isPlayerTurn()
+    {
+        return this.playerTurn;
+    }
+
+    public int getRound()
+    {
+        return this.round;
+    }
+
+    public void setRound(int value)
+    {
+        this.round = value;
+    }
+
+    public void endTurn()
+    {
+        playerTurn = !playerTurn;
+
+        turnsTotal++;
+        if (turnsTotal % 2 == 0)
+            round++;
+    }
+
+    public boolean checkSlotFree(int slotNumber, BoardSides side)
+    {
+        /*for (int i = 0; i < playerSlots.size(); i++)
+        {
+            System.out.println("SLOT " + i + " contains " + playerSlots.get(i));
+        }*/
+
+        if (side == BoardSides.RIGHT)
+        {
+            return (playerSlots.get(slotNumber) == null);
+        }
+        return (computerSlots.get(slotNumber) == null);
+    }
 
     /**
      *  Prepares both player's and computer's card deck
      *  Cards are put together randomly
      *  Possible TODO: Rules for random pack generation
      */
-    public void prepareDecks()
+    public void prepareRandomDecks()
     {
         // Get number of spellcards per pack
         int spellCardsCount = GameHelper.getRandomInteger(8);
-        int minionCardsCount = 30 - spellCardsCount;
+        int minionCardsCount = DECK_SIZE - spellCardsCount;
 
         // Pick randomly number of spell cards
         for (int i = 0; i < spellCardsCount; i++)
@@ -103,10 +142,16 @@ public class Board{
             // Remove the last one and remember forever that we draw decks from
             // the end, virtually.
             Card card = deck.remove(deck.size()-1);
-            hero.putCardToHand(card);
 
-            // Report what happened
-            System.out.println("Player " + hero.getName() + " draw " + card.getCardName());
+            if (hero.getHand().size() < 10)
+            {
+                hero.putCardToHand(card);
+                System.out.println("Player " + hero.getName() + " drew " + card.getCardName());
+            }
+            else
+            {
+                System.out.println("Player " + hero.getName() + " drew " + card.getCardName() + " but his hand was full, so it burned down. Like your house. After those lemons.");
+            }
         }
         else
         {
@@ -127,6 +172,7 @@ public class Board{
      * @param card Card Card to be placed on board
      * @return Boolean true on card placement success
      * TODO: Reconsider how to properly handle determining what side is computer and what player (comment above)
+     * TODO: Implement execution of battle-cries and after CALENDAR structure is introduced, also planning
      */
     public boolean placeCard(int slotNumber, BoardSides side, Card card)
     {
@@ -138,11 +184,13 @@ public class Board{
             if (side == BoardSides.LEFT)
             {
                 computerSlots.put(slotNumber, card);
+                logCardPlacement(card.getCardName(), slotNumber);
             }
             // RIGHT means players slot
             else
             {
                 playerSlots.put(slotNumber, card);
+                logCardPlacement(card.getCardName(), slotNumber);
             }
 
             return true;
@@ -225,6 +273,16 @@ public class Board{
         logHeroEntrance(hero);
     }
 
+    public Hero getPlayerHero()
+    {
+        return this.player;
+    }
+
+    public Hero getComputerHero()
+    {
+        return this.computer;
+    }
+
 
     /**
      * Debug method that logs when hero 'enters' the game.
@@ -233,6 +291,11 @@ public class Board{
     private void logHeroEntrance(Hero hero)
     {
         System.out.println("Hero " + hero.getName() + " entered the game (Player: " + hero.isPlayer() + ", Health: " + hero.getHealth() + ")");
+    }
+
+    private void logCardPlacement(String cardName, int slot)
+    {
+        System.out.println("Card " + cardName + " put into slot " + slot);
     }
 
 

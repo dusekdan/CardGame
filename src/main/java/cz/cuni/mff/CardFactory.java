@@ -1,21 +1,13 @@
+/*
+ * Created by David Riha on 4.7.2017.
+ * Project: Simplified HearthStone java implementation.
+ */
 package cz.cuni.mff;
-
 import cz.cuni.mff.models.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
-/**
- * Created by David Riha on 5.7.2017.
- * Project: Simplified HearthStone java implementation
- */
 @Service
 public class CardFactory {
-
-    /**
-     * All possible cards are stored within the cards ArrayList
-     */
-    private static ArrayList<Card> cards = new ArrayList<>();
 
 
     /**
@@ -31,7 +23,6 @@ public class CardFactory {
     public Card createMinionCard(String name, String description, int cost, SpecialEffect effect, int health, int attack, MinionTypes minionType)
     {
         return new MinionCard(name, description, cost, effect, health, attack, minionType);
-        //cards.add(card);
     }
 
 
@@ -45,16 +36,5 @@ public class CardFactory {
     public Card createSpellCard(String name, String description, int cost, SpecialEffect effect)
     {
         return new SpellCard(name, description, cost, effect);
-        //cards.add(card);
-    }
-
-
-    /**
-     * Retrieves all possible cards created so far via createXXXCard methods
-     * @return ArrayList<Card> List of cards
-     */
-    public ArrayList<Card> getAllCards()
-    {
-        return cards;
     }
 }

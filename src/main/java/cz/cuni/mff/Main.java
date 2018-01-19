@@ -1,16 +1,18 @@
+/*
+ * Created by David Riha on 4.7.2017.
+ * Project: Simplified HearthStone java implementation.
+ */
 package cz.cuni.mff;
-
 import cz.cuni.mff.game.Board;
+import cz.cuni.mff.game.GameHelper;
 import cz.cuni.mff.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/**
- * Created by David Riha on 4.7.2017.
- * Project: Simplified HearthStone java implementation
- */
+import java.io.IOException;
+
 // Launching the application via "Main" build configuration is only a temporary
 // solution as we'll configure maven later on.
 @SpringBootApplication
@@ -35,54 +37,60 @@ public class Main {
 
     private void launchGame()
     {
-        // Prepare cards that will be used
-        prepareGameCards();     // TODO: Handle this in other place, differently (less statics)
+        CardRegistry.init();    // Hit card registry on game launch, so card collections get populated
 
-        // Test card accessibility
-        // This implies that our static implementation works as expected
-        // System.out.println("Size of generated pack afterwards: " + CardFactory.getInstance().getAllCards().size());
-
-        // Create two heroes
+        // Create heroes and put them into the game
         Hero player = new Hero("FlexoCZ", true);
         Hero computer = new Hero("Anihilat0r", false);
-
-        // Place heroes in the game
         board.putHero(player);
         board.putHero(computer);
 
         // Generate decks for players.
-        board.prepareDecks();
+        board.prepareRandomDecks();
 
-        // Game loop
+        // Start the game loop
         // -- While both heroes health are greater than 0, loop
         int round = 0;
         while (!board.isGameOver())
         {
-            System.out.println("Entering round: #" + round);
+            System.out.println("Entering round: #" + board.getRound());
 
-            try
+            if (board.isPlayerTurn())
             {
-                Thread.sleep(500);
+                // Player does his thing
+                board.drawCard(player);
+
+                // Read card number & slot number for placement
+                int entry = 0;
+                int slot = 0;
+                int trash = -1; // To swallow end line in console
+                try {
+                    entry = GameHelper.convertASCIIToInt(System.in.read());
+                    slot = GameHelper.convertASCIIToInt(System.in.read());
+
+                    trash = System.in.read(); // Get rid of that enter
+                } catch (IOException e) { System.out.println("Reading entry failed. God damn."); }
+
+                // TODO: As every value gets decremented by 1 (cause of indexing) figure out the way to translate this more nicely
+                System.out.println("Entry=" + entry + " Slot=" + slot);
+                if (board.checkSlotFree(slot-1, BoardSides.RIGHT))
+                {
+                    board.placeCard(slot-1, BoardSides.RIGHT, board.getPlayerHero().getHand().get(entry-1));
+                    board.getPlayerHero().removeFromHand(entry-1);
+                }
+                else
+                {
+                    // TODO: Probably do this in a loop until player chooses correctly (but since this is only a console demo, it doesnt matter that much)
+                    System.out.println("You selected occupied slot. You won't get the chance to choose different slot, your bad.");
+                }
             }
-            catch (Exception e)
+            else
             {
-                System.out.println("Unable to sleep, so we're just gonna skip to another round.");
+                // Computer does his thing
+                board.drawCard(computer);
+                // TODO: Implement computer strategy (pretty much just random card placement at the moment I guess)
             }
-
-            System.out.println("Leaving round: #" + round);
-
-            round++;
-            board.drawCard(player);
-            board.drawCard(computer);
-
-            /*
-            System.out.println("Press enter to proceed to another round.");
-            try {
-                System.in.read();
-            } catch (IOException e) {
-                System.out.println("Something went south.");
-            }
-            */
+            board.endTurn();
         }
 
         // Retrieve game result
@@ -106,14 +114,5 @@ public class Main {
         System.out.println(" Rounds played: " + roundsTotal);
         System.out.println(" === SEE YOU NEXT TIME  ===");
 
-    }
-
-    // In real world, this would have been stored in some sort of a database
-    // and cards and their stats would be pulled from it. This is not a real
-    // world, but school projects, so we stick to loading them before game
-    // is launched.
-    private void prepareGameCards()
-    {
-        System.out.println("Size of generated card pack is: " + factory.getAllCards().size());
     }
 }

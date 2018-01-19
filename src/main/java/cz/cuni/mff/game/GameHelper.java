@@ -1,14 +1,12 @@
+/*
+ * Created by David Riha on 4.7.2017.
+ * Project: Simplified HearthStone java implementation.
+ */
 package cz.cuni.mff.game;
-
 import cz.cuni.mff.models.Card;
-
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by David Riha on 4.7.2017.
- * Project: Simplified HearthStone java implementation
- */
 
 /**
  * Contains functionality for starting, ending and generating the game
@@ -31,5 +29,11 @@ public class GameHelper
     {
         final Random rand = new Random();
         return rand.nextInt(bound);
+    }
+
+    // Following method shall not be present in final code as it was only "keyboard" helper when no UI was implemented
+    public static int convertASCIIToInt(int ascii)
+    {
+        return ascii-48;    // 48 is ASCII number offset, which could have been a constant if it was not a temporary method
     }
 }

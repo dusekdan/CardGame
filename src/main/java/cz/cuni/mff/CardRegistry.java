@@ -38,6 +38,13 @@ final public class CardRegistry
     }
 
     /**
+     * Empty implementation of public method allows to force execution
+     * of static initializer at specific time. This will be most likely
+     * done on application startup.
+     */
+    public static void init(){}
+
+    /**
      * Returns clone of minion card prototype by name.
      * @param name String minion identifier.
      * @return MinionCard Unique instance representing minion with given name.
