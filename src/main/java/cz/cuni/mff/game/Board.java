@@ -3,9 +3,7 @@ package cz.cuni.mff.game;
 import cz.cuni.mff.CardFactory;
 import cz.cuni.mff.CardRegistry;
 import cz.cuni.mff.models.*;
-import helpers.ObjectCloner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

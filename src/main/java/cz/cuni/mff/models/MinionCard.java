@@ -26,7 +26,7 @@ public class MinionCard extends Card
 
 
     /**
-     * Construct Minion Card based of parameters provided
+     * Constructs Minion Card based of parameters provided
      * @param name String Minion name
      * @param description String Minion description, in collision with SpecialEffect description
      * @param cost Integer Mana cost to play the card

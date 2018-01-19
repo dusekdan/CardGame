@@ -15,7 +15,7 @@ public class CardFactory {
     /**
      * All possible cards are stored within the cards ArrayList
      */
-    private static ArrayList<Card> cards = new ArrayList();
+    private static ArrayList<Card> cards = new ArrayList<>();
 
 
     /**

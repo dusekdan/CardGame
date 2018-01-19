@@ -19,33 +19,56 @@ final public class CardRegistry
     private static Map<String, Card> minions;
     private static Map<String, Card> spells;
 
+    private static CardFactory cardFactory;
+
     private CardRegistry() { }
 
+    /*
+     * Populate minions and spells collections.
+     */
     static {
+        if (cardFactory == null)
+            cardFactory = new CardFactory();
+
         if (minions == null)
             populateMinionRegistry();
+
         if (spells == null)
             populateSpellRegistry();
     }
 
+    /**
+     * Returns clone of minion card prototype by name.
+     * @param name String minion identifier.
+     * @return MinionCard Unique instance representing minion with given name.
+     */
     public static Card getMinionCard(String name)
     {
         Card minion = minions.get(name);
         if (minion != null)
-            return minion;
+            return minion.cloneCard();
         else
             throw new NullPointerException();
     }
 
+    /**
+     * Returns clone of spell card prototype by name.
+     * @param name String spell identifier.
+     * @return SpellCard Unique instance representing spell with given name.
+     */
     public static Card getSpellCard(String name)
     {
         Card spell = spells.get(name);
         if (spell != null)
-            return spell;
+            return spell.cloneCard();
         else
             throw new NullPointerException();
     }
 
+    /**
+     * Retrieves random spell card.
+     * @return SpellCard Randomly selected card form all spell cards universe.
+     */
     public static Card getRandomSpellCard()
     {
         int spellsSize = spells.size();
@@ -55,6 +78,10 @@ final public class CardRegistry
         return spells.get(keys.get(randomSpell)).cloneCard();
     }
 
+    /**
+     * Retrieves random minion card.
+     * @return SpellCard Randomly selected card form all minion cards universe.
+     */
     public static Card getRandomMinionCard()
     {
         int minionsSize = minions.size();
@@ -64,11 +91,11 @@ final public class CardRegistry
         return minions.get(keys.get(randomMinion)).cloneCard();
     }
 
+    /**
+     * Populates registry with prototype MinionCard instances.
+     */
     private static void populateMinionRegistry()
     {
-        // Prepare card instances -> using cardFactory
-        CardFactory cardFactory = new CardFactory();
-
         minions = new HashMap<>();
         minions.put("Ogre Magi",
                 cardFactory.createMinionCard("Ogre Magi", "Intelect based troll with two heads.", 4, new SpecialEffect(), 4, 2, MinionTypes.REGULAR));
@@ -162,12 +189,11 @@ final public class CardRegistry
                 cardFactory.createMinionCard("Sea Giant", "Cost 1 less for each other minion on the battlefield", 10, new SpecialEffect(), 8, 8, MinionTypes.REGULAR));
     }
 
-
+    /**
+     * Populates registry with SpellCard instances.
+     */
     private static void populateSpellRegistry()
     {
-        // Prepare card instance -> using cardFactory
-        CardFactory cardFactory = new CardFactory();
-
         spells = new HashMap<>();
         spells.put("Flamestrike",
                 cardFactory.createSpellCard("Flamestrike", "Deal 4 damage to all \n enemy minions.", 7, new SpecialEffect()));

@@ -26,7 +26,7 @@ public class SpecialEffect implements java.io.Serializable {
      */
     public SpecialEffect()
     {
-        //System.out.println("Special effect constructor created.");
+
     }
 
 }
