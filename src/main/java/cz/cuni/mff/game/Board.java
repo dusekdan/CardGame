@@ -1,6 +1,7 @@
 package cz.cuni.mff.game;
 
 import cz.cuni.mff.CardFactory;
+import cz.cuni.mff.CardRegistry;
 import cz.cuni.mff.models.*;
 import helpers.ObjectCloner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,38 +58,21 @@ public class Board{
      */
     public void prepareDecks()
     {
-        // Get cards from factory
-        // TODO: Here I stopped when I started introducing proper design patterns (Factories, Prototypes)
-        // So here I have to continue with updating card retrieval to use prototyping.
-        // I have to use CardRegistry in order to get clones of prepared cards
-        // -> it will require to rewrite logic of picking random card. Originally I picked random cards from all cards
-        // pool, now I will have to assume/prepare concrete deck and use cards from the deck.
-        ArrayList<Card> cardPool = cardFactory.getAllCards();
+        // Get number of spellcards per pack
+        int spellCardsCount = GameHelper.getRandomInteger(8);
+        int minionCardsCount = 30 - spellCardsCount;
 
-
-
-        Card pickedPlayer;
-        Card pickedComputer;
-        for (int i = 0; i < DECK_SIZE; i++)
+        // Pick randomly number of spell cards
+        for (int i = 0; i < spellCardsCount; i++)
         {
-            // Pick random card instance and clone it to playerDeck, repeat the process for computerDeck
-            pickedPlayer = GameHelper.randomArrayListItem(cardPool);
-            pickedComputer = GameHelper.randomArrayListItem(cardPool);
-
-            try
-            {
-                playerDeck.add(
-                        (Card) ObjectCloner.deepCopy(pickedPlayer)
-                );
-                computerDeck.add(
-                        (Card) ObjectCloner.deepCopy(pickedComputer)
-                );
-            }
-            catch (Exception e)
-            {
-                System.out.println("Unable to clone object, message: " + e.getMessage());
-            }
-
+            playerDeck.add(CardRegistry.getRandomSpellCard());
+            computerDeck.add(CardRegistry.getRandomSpellCard());
+        }
+        // Pick randomly number of minion card
+        for (int i = 0; i < minionCardsCount; i++)
+        {
+            playerDeck.add(CardRegistry.getRandomMinionCard());
+            computerDeck.add(CardRegistry.getRandomMinionCard());
         }
     }
 

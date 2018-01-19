@@ -26,4 +26,10 @@ public class GameHelper
         final Random rand = new Random();
         return list.get(rand.nextInt(list.size()));
     }
+
+    public static int getRandomInteger(int bound)
+    {
+        final Random rand = new Random();
+        return rand.nextInt(bound);
+    }
 }
