@@ -50,20 +50,41 @@ public class Main {
 
         // Start the game loop
         // -- While both heroes health are greater than 0, loop
-        int round = 0;
         while (!board.isGameOver())
         {
+            int trash = -1; // To swallow end line in console
+
             System.out.println("Entering round: #" + board.getRound());
 
             if (board.isPlayerTurn())
             {
+
+                if (board.getRound() == 1)
+                {
+                    // Get 3 cards and an option to change some of them
+                    board.getPlayerHero().drawCard();
+                    board.getPlayerHero().drawCard();
+                    board.getPlayerHero().drawCard();
+
+                    //  Offer exchange
+                    //System.out.println("Card #0: " + board.getPlayerHero().getHand().get(0).getCardName());
+                    //System.out.println("Card #1: " + board.getPlayerHero().getHand().get(1).getCardName());
+                    //System.out.println("Card #2: " + board.getPlayerHero().getHand().get(2).getCardName());
+                    //System.out.println("|=======| REDRAWING IN PROGRESS |=======|");
+                    // Fake player's choice to change cards 1, 2 and keep the 3 (4 not offered for exchange)
+                    board.getPlayerHero().redrawCards(1, 1, null, null);
+                    //  Print redraw
+                    //System.out.println("Card #0: " + board.getPlayerHero().getHand().get(0).getCardName());
+                    //System.out.println("Card #1: " + board.getPlayerHero().getHand().get(1).getCardName());
+                    //System.out.println("Card #2: " + board.getPlayerHero().getHand().get(2).getCardName());
+                }
+
                 // Player does his thing
-                board.drawCard(player);
+                board.getPlayerHero().drawCard();
 
                 // Read card number & slot number for placement
                 int entry = 0;
                 int slot = 0;
-                int trash = -1; // To swallow end line in console
                 try {
                     entry = GameHelper.convertASCIIToInt(System.in.read());
                     slot = GameHelper.convertASCIIToInt(System.in.read());
@@ -87,7 +108,7 @@ public class Main {
             else
             {
                 // Computer does his thing
-                board.drawCard(computer);
+                board.getComputerHero().drawCard();
                 // TODO: Implement computer strategy (pretty much just random card placement at the moment I guess)
             }
             board.endTurn();
@@ -98,7 +119,7 @@ public class Main {
         // -- Number of rounds
         // -- What else?
         String winner = (player.isDefeated()) ? computer.getName() : player.getName();
-        printGameResults(winner, round);
+        printGameResults(winner, board.getRound());
 
         // Place both cards somewhere on the board
         //board.placeCard(0, BoardSides.LEFT, minion1);

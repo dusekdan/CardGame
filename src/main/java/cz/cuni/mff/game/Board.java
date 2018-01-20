@@ -43,8 +43,8 @@ public class Board{
      * 30 cards (generated via prepareRandomDecks) and are reduced with
      * each draw (drawCard)
      */
-    private ArrayList<Card> playerDeck = new ArrayList<>();
-    private ArrayList<Card> computerDeck = new ArrayList<>();
+    private Deck playerDeck;
+    private Deck computerDeck;
 
     private int round = 1;
     private int turnsTotal = 0;
@@ -76,11 +76,6 @@ public class Board{
 
     public boolean checkSlotFree(int slotNumber, BoardSides side)
     {
-        /*for (int i = 0; i < playerSlots.size(); i++)
-        {
-            System.out.println("SLOT " + i + " contains " + playerSlots.get(i));
-        }*/
-
         if (side == BoardSides.RIGHT)
         {
             return (playerSlots.get(slotNumber) == null);
@@ -89,12 +84,22 @@ public class Board{
     }
 
     /**
-     *  Prepares both player's and computer's card deck
-     *  Cards are put together randomly
-     *  Possible TODO: Rules for random pack generation
+     * Initializes randomly decks for player and the computer.
      */
     public void prepareRandomDecks()
     {
+        player.setDeck(prepareRandomDeck());
+        computer.setDeck(prepareRandomDeck());
+    }
+
+    /**
+     * Creates deck from all cards in the pool, randomly.
+     * @return Deck Randomly assembled deck.
+     */
+    private Deck prepareRandomDeck()
+    {
+        Deck deck = new Deck();
+
         // Get number of spellcards per pack
         int spellCardsCount = GameHelper.getRandomInteger(8);
         int minionCardsCount = DECK_SIZE - spellCardsCount;
@@ -102,66 +107,27 @@ public class Board{
         // Pick randomly number of spell cards
         for (int i = 0; i < spellCardsCount; i++)
         {
-            playerDeck.add(CardRegistry.getRandomSpellCard());
-            computerDeck.add(CardRegistry.getRandomSpellCard());
+            deck.addCard(CardRegistry.getRandomSpellCard());
         }
+
         // Pick randomly number of minion card
         for (int i = 0; i < minionCardsCount; i++)
         {
-            playerDeck.add(CardRegistry.getRandomMinionCard());
-            computerDeck.add(CardRegistry.getRandomMinionCard());
+            deck.addCard(CardRegistry.getRandomMinionCard());
         }
+
+        return deck;
     }
 
-
-    /**
-     * Debug method for showing contents of both player and computer decks
-     */
-    private void showDecks()
+    public Deck getPlayerDeck()
     {
-        System.out.println("=======SHOWING DECK=========");
-        for (int i = 0; i < playerDeck.size(); i++)
-        {
-            System.out.println("(Player, Computer): (" + playerDeck.get(i).getCardName() + ", " + computerDeck.get(i).getCardName() + ")");
-            System.out.println("Object ID: " + playerDeck.get(i) + ", " + computerDeck.get(i));
-        }
+        return player.getDeck();
     }
 
-
-    /**
-     * Draws card from corresponding deck
-     * @param hero Hero Identification of 'side' to draw card
-     * TODO: Burn card when there are 10 cards in hand already
-     */
-    public void drawCard(Hero hero)
+    public Deck getComputerDeck()
     {
-        ArrayList<Card> deck = hero.isPlayer() ? playerDeck : computerDeck;
-
-        if (deck.size() >= 1)
-        {
-            // Remove the last one and remember forever that we draw decks from
-            // the end, virtually.
-            Card card = deck.remove(deck.size()-1);
-
-            if (hero.getHand().size() < 10)
-            {
-                hero.putCardToHand(card);
-                System.out.println("Player " + hero.getName() + " drew " + card.getCardName());
-            }
-            else
-            {
-                System.out.println("Player " + hero.getName() + " drew " + card.getCardName() + " but his hand was full, so it burned down. Like your house. After those lemons.");
-            }
-        }
-        else
-        {
-            executeFatigue(hero);
-        }
-
-        System.out.println("Current player deck size: " + playerDeck.size());
-        System.out.println("Current hero hand size:" + hero.getHand().size());
+        return computer.getDeck();
     }
-
 
     // Let's introduce convention here - LEFT is the computer side, RIGHT is the player side
     // One day, we will regret this. But that day is not today. Today we fight.
@@ -173,6 +139,7 @@ public class Board{
      * @return Boolean true on card placement success
      * TODO: Reconsider how to properly handle determining what side is computer and what player (comment above)
      * TODO: Implement execution of battle-cries and after CALENDAR structure is introduced, also planning
+     * TODO: Spell cards should be used instead of placed -> determine it here and rename to useCard?
      */
     public boolean placeCard(int slotNumber, BoardSides side, Card card)
     {
@@ -204,7 +171,7 @@ public class Board{
 
 
     /**
-     * Remove card from the board
+     * Remove card from the board.
      * @param slotNumber Integer identification of slot from which we remove card
      * @param side BoardSides Side of the board
      * @return Boolean True on successful removal, False otherwise
@@ -231,17 +198,6 @@ public class Board{
             System.out.println("Invalid slot number: " + slotNumber + " (maximum is " + MAX_SLOT_INDEX + ")");
             return false;
         }
-    }
-
-
-    /**
-     * Call Hero class method that will damage hero accordingly
-     * @param hero Hero Hero to be damaged.
-     */
-    private void executeFatigue(Hero hero)
-    {
-        System.out.println("[NO CARDS LEFT IN DECK - FATIGUE DAMAGE]");
-        hero.decreaseHealthByFatigue();
     }
 
 

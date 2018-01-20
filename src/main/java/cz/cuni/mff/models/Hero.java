@@ -23,6 +23,7 @@ public class Hero
     private int mana;
     private int crystals;
     private boolean player;
+    private Deck deck;
 
     /**
      * Current game-state properties
@@ -63,11 +64,92 @@ public class Hero
     /**
      * Removes card from hand and fills the gap in hand.
      * @param index Integer index of card to be removed from hand.
+     * @return Card removed card.
      */
-    public void removeFromHand(int index)
+    public Card removeFromHand(int index)
     {
-        getHand().remove(index);
+        System.out.println("Removin " + getHand().get(index).getCardName());
+        return getHand().remove(index);
     }
+
+
+    /**
+     * Draws card from hero's deck
+     */
+    public void drawCard()
+    {
+        if (deck.size() >= 1)
+        {
+            // Remove the last one and remember forever that we draw decks from
+            // the end, virtually.
+            Card card = deck.removeCardFromTop();
+
+            if (hand.size() < 10)
+            {
+                putCardToHand(card);
+                System.out.println("Player " + getName() + " drew " + card.getCardName());
+            }
+            else
+            {
+                System.out.println("Player " + getName() + " drew " + card.getCardName() + " but his hand was full, so it burned down. Like your house. After those lemons.");
+            }
+        }
+        else
+        {
+            executeFatigue();
+        }
+
+        System.out.println("Current player deck size: " + deck.size());
+        System.out.println("Current hero hand size:" + getHand().size());
+    }
+
+    public void redrawCards(Integer card1, Integer card2, Integer card3, Integer card4)
+    {
+        // First remove cards from hand, order matters, cards under higher indexes must be removed first
+        // so the array list order is not changed.
+        if (card4 != null) {
+            deck.addCard(removeFromHand(3));
+        }
+
+        if (card3 != null) {
+            deck.addCard(removeFromHand(2));
+        }
+
+        if (card2 != null) {
+            deck.addCard(removeFromHand(1));
+        }
+
+        if (card1 != null) {
+            deck.addCard(removeFromHand(0));
+        }
+
+        // Then redraw
+        if (card1 != null) {
+            drawCard();
+        }
+
+        if (card2 != null) {
+            drawCard();
+        }
+
+        if (card3 != null) {
+            drawCard();
+        }
+
+        if (card4 != null) {
+            drawCard();
+        }
+    }
+
+    /**
+     * Call Hero class method that will damage hero accordingly
+     */
+    private void executeFatigue()
+    {
+        System.out.println("[NO CARDS LEFT IN DECK - FATIGUE DAMAGE]");
+        decreaseHealthByFatigue();
+    }
+
 
     /**
      * Decreases hero health points by value
@@ -132,4 +214,14 @@ public class Hero
     public int getCrystals() { return crystals; }
 
     public boolean isPlayer() { return player; }
+
+    public Deck getDeck()
+    {
+        return deck;
+    }
+
+    public void setDeck(Deck deck)
+    {
+        this.deck = deck;
+    }
 }
